@@ -1,0 +1,44 @@
+# -*- mode: shell-script -*-
+# vim: ft=zsh fdm=marker :
+
+SXIV_PATH=$HOME/.zsh-image-selector/sxiv
+
+image-selector()
+{
+    autoload -U modify-current-argument
+    autoload -U split-shell-arguments
+
+    # local variables for split-shell-arguments
+    local reply REPLY REPLY2
+
+    local ARG
+    local PREFIX
+
+    ((--CURSOR))
+    split-shell-arguments
+    ((++CURSOR))
+
+    ARG=$(eval echo $reply[$REPLY]) # evaluate tilde etc.
+
+    # read the file prefix
+    PREFIX=$PWD
+    [ -n "$ARG" ] && PREFIX=$ARG
+
+    # if it is a directory, use its contents
+    [ -d "$PREFIX" ] && PREFIX=${PREFIX}/
+
+    local FILES
+    FILES=(${PREFIX}*(-.N))
+    [ -z "$FILES" ] && return
+
+    FILES=($($SXIV_PATH -t $FILES 2> /dev/null | sort | uniq))
+    [ -z "$FILES" ] && return
+
+    if [ -n "$ARG" ]; then
+        modify-current-argument '$FILES'
+    else
+        LBUFFER="${LBUFFER%% #} $FILES"
+    fi
+}
+zle -N image-selector
+bindkey '^X^I' image-selector
