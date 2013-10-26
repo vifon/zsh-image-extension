@@ -1,9 +1,9 @@
 # -*- mode: shell-script -*-
 # vim: ft=zsh fdm=marker :
 
-SXIV_PATH=$HOME/.zsh-image-selector/sxiv
-[ -x "$SXIV_PATH" ] || SXIV_PATH="${0:h}/sxiv"
-[ -x "$SXIV_PATH" ] || SXIV_PATH="${0:A:h}/sxiv"
+IMAGE_SELECTOR_SXIV=$HOME/.zsh-image-selector/sxiv
+[ -x "$IMAGE_SELECTOR_SXIV" ] || IMAGE_SELECTOR_SXIV="${0:h}/sxiv"
+[ -x "$IMAGE_SELECTOR_SXIV" ] || IMAGE_SELECTOR_SXIV="${0:A:h}/sxiv"
 
 image-selector()
 {
@@ -33,7 +33,7 @@ image-selector()
     FILES=(${PREFIX}*(-.N))
     [ -z "$FILES" ] && return
 
-    FILES=($($SXIV_PATH -t $FILES 2> /dev/null | sort | uniq))
+    FILES=($($IMAGE_SELECTOR_SXIV -t $FILES 2> /dev/null | sort | uniq))
     [ -z "$FILES" ] && return
 
     if [ -n "$ARG" ]; then
