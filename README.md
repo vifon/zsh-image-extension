@@ -11,6 +11,9 @@ INSTALLATION
 Copy or link this directory to `~/.zsh-image-selector/`. Run `make` and then
 just source the `~/.zsh-image-selector/image-selector` file in your `zshrc`.
 
+You can use some other directory in more recent versions but it is only slightly
+tested.
+
 ACKNOWLEDGMENTS
 ===============
 

@@ -2,6 +2,8 @@
 # vim: ft=zsh fdm=marker :
 
 SXIV_PATH=$HOME/.zsh-image-selector/sxiv
+[ -x "$SXIV_PATH" ] || SXIV_PATH="${0:h}/sxiv"
+[ -x "$SXIV_PATH" ] || SXIV_PATH="${0:A:h}/sxiv"
 
 image-selector()
 {
