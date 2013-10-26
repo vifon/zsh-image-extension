@@ -43,4 +43,4 @@ image-selector()
     fi
 }
 zle -N image-selector
-bindkey '^X^I' image-selector
+bindkey ${IMAGE_SELECTOR_KEY:-'^X^I'} image-selector

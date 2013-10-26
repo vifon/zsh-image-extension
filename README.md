@@ -25,7 +25,8 @@ USAGE
 =====
 
 To select the images from the current directory, just press C-x C-i (i.e. ctrl+x
-and then ctrl+i).
+and then ctrl+i). You can change that key by setting the `IMAGE_SELECTOR_KEY`
+variable before sourcing this plugin.
 
 If there is a path before the cursor, is is used as a prefix (or just directory)
 of all the files to match. Only the files with that prefix will be diplayed for
