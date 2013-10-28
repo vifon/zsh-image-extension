@@ -1,13 +1,13 @@
 diff --git a/config.h b/config.h
-index cd89b5f..137a08e 100644
+index f5d048a..991d73c 100644
 --- a/config.h
 +++ b/config.h
-@@ -135,6 +135,8 @@ static const keymap_t keys[] = {
- 			"jpegtran -rotate 270 -copy all -outfile \"$SXIV_IMG\" \"$SXIV_IMG\"" },
- 	{ true,   XK_period,        it_shell_cmd,         (arg_t) \
+@@ -157,6 +157,8 @@ static const keymap_t keys[] = {
  			"jpegtran -rotate  90 -copy all -outfile \"$SXIV_IMG\" \"$SXIV_IMG\"" },
-+    { true,   XK_Return,        it_shell_cmd,         (arg_t)
-+            "echo \"$SXIV_IMG\""},
+ 	{ true,   XK_slash,         it_shell_cmd,         (arg_t) \
+ 			"jpegtran -rotate 180 -copy all -outfile \"$SXIV_IMG\" \"$SXIV_IMG\"" },
++
++	{ true,   XK_Return,        it_toggle_image_mark, (arg_t) None },
  };
  
  /* mouse button mappings for image mode: */

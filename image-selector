@@ -33,7 +33,7 @@ image-selector()
     FILES=(${PREFIX}*(-.N))
     [ -z "$FILES" ] && return
 
-    FILES=($($IMAGE_SELECTOR_SXIV -t $FILES 2> /dev/null | sort | uniq))
+    FILES=($($IMAGE_SELECTOR_SXIV -t -o $FILES 2> /dev/null | sort | uniq))
     [ -z "$FILES" ] && return
 
     if [ -n "$ARG" ]; then
