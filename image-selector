@@ -24,10 +24,10 @@ image-selector()
 
     # read the file prefix
     PREFIX=$PWD
-    [ -n "$ARG" ] && PREFIX=$ARG
+    [ -n "$ARG" ] && PREFIX=${ARG%%/#}
 
-    # if it is a directory, use its contents
-    [ -d "$PREFIX" ] && PREFIX=${PREFIX}/
+    # if it is a directory, use its contents; also, corner case
+    [ -d "$PREFIX" ] || [ "$ARG" = "/" ] && PREFIX=${PREFIX}/
 
     local FILES
     FILES=(${PREFIX}*(-.N))
