@@ -1,9 +1,16 @@
 # -*- mode: shell-script -*-
 # vim: ft=zsh fdm=marker :
 
-IMAGE_SELECTOR_SXIV=$HOME/.zsh-image-selector/sxiv
-[ -x "$IMAGE_SELECTOR_SXIV" ] || IMAGE_SELECTOR_SXIV="${0:h}/sxiv"
-[ -x "$IMAGE_SELECTOR_SXIV" ] || IMAGE_SELECTOR_SXIV="${0:A:h}/sxiv"
+                                                                     # find out where sxiv is located:
+IMAGE_SELECTOR_SXIV=$HOME/.zsh-image-selector/sxiv                   # - default path
+[ -x "$IMAGE_SELECTOR_SXIV" ] || IMAGE_SELECTOR_SXIV="${0:h}/sxiv"   # - directory with this plugin
+[ -x "$IMAGE_SELECTOR_SXIV" ] || IMAGE_SELECTOR_SXIV="${0:A:h}/sxiv" # - directory with this plugin with symlinks resolved
+[ -x "$IMAGE_SELECTOR_SXIV" ] || IMAGE_SELECTOR_SXIV=sxiv            # - give up and use the global sxiv
+if [ ! -x "$IMAGE_SELECTOR_SXIV" ] &&                                # - sxiv not found
+   [ -z "$commands[sxiv]" ]; then
+    echo 'ERROR: sxiv not found in $PATH' 1>&2
+    return 1
+fi
 
 image-selector()
 {
