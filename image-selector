@@ -30,7 +30,7 @@ image-selector()
     ARG=$(eval echo $reply[$REPLY]) # evaluate tilde etc.
 
     # read the file prefix
-    PREFIX=$PWD
+    PREFIX=.
     [ -n "$ARG" ] && PREFIX=${ARG%%/#}
 
     # if it is a directory, use its contents; also, corner case
