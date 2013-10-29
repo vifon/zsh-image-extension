@@ -43,6 +43,9 @@ image-selector()
     FILES=($($IMAGE_SELECTOR_SXIV -t -o $FILES 2> /dev/null | sort | uniq))
     [ -z "$FILES" ] && return
 
+    # quote the metacharacters
+    FILES=$FILES:q
+
     if [ -n "$ARG" ]; then
         modify-current-argument '$FILES'
     else
