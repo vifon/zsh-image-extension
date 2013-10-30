@@ -12,6 +12,31 @@ if [ ! -x "$IMAGE_SELECTOR_SXIV" ] &&                                # - sxiv no
     return 1
 fi
 
+W3MIMGDISPLAY=/usr/lib/w3m/w3mimgdisplay
+if [ -x "$W3MIMGDISPLAY" ]; then
+    image-preview()
+    {
+        autoload -U split-shell-arguments
+
+        # local variables for split-shell-arguments
+        local reply REPLY REPLY2
+
+        local ARG
+
+        ((--CURSOR))
+        split-shell-arguments
+        ((++CURSOR))
+
+        ARG=$(eval echo $reply[$REPLY]) # evaluate tilde etc.
+
+        echo -e "2;3;\n0;1;0;200;0;0;0;0;0;0;${ARG}\n4;\n3;" | $W3MIMGDISPLAY &> /dev/null
+        read -s -k
+        zle clear-screen
+    }
+    zle -N image-preview
+    bindkey '^X^O' image-preview
+fi
+
 image-selector()
 {
     autoload -U modify-current-argument
