@@ -24,7 +24,16 @@ if [ -x "$W3MIMGDISPLAY" ]; then
 
         split-shell-arguments
 
-        "$IMAGE_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" "${(@Q)reply}" | "$W3MIMGDISPLAY" &> /dev/null
+        local OUTPUT
+
+        OUTPUT=`"$IMAGE_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" "${(@Q)reply}"`
+        if [ "$?" != "0" ]; then
+            return $?
+        fi
+
+        "$W3MIMGDISPLAY" &> /dev/null <<EOF
+$OUTPUT
+EOF
 
         read -s -k
         zle clear-screen

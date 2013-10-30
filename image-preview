@@ -43,5 +43,8 @@ def main():
             if row == max_rows:
                 break
 
+    # signal whether we have found any images via exitcode
+    exit((column or row) == 0)
+
 if __name__ == "__main__":
     main()
