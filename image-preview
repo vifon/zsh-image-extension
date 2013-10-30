@@ -4,12 +4,6 @@ from sys import argv
 import re
 import subprocess
 
-try:
-    from subprocess import DEVNULL
-except ImportError:
-    import os
-    DEVNULL = open(os.devnull, "wb")
-
 def main():
     w3mimgdisplay = argv.pop(1)
     # every odd argument contains a commandline element
@@ -32,9 +26,6 @@ def main():
             w, h = [int(string)
                     for string
                     in w3m.communicate("5;{0}".format(arg).encode())[0].decode().split()]
-            w3m = subprocess.Popen([w3mimgdisplay],
-                                   stdin=subprocess.PIPE,
-                                   stdout=DEVNULL)
             w_scaled = width
             h_scaled = (w_scaled * h) // w
             print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
