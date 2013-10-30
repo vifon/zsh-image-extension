@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+
+from sys import argv
+import re
+import subprocess
+
+def main():
+    w3mimgdisplay = argv.pop(1)
+    # every odd argument contains a commandline element
+    args = [argv[n] for n in range(2, len(argv), 2)]
+
+    max_height = 300
+    width = 300
+    in_row = 5
+    max_rows = 3
+    border = 10
+
+    column = 0
+    row = 0
+    for arg in args:
+        if re.search(r"\.je?pg$|\.png$|\.bmp$", arg, re.IGNORECASE):
+            w3m = subprocess.Popen([w3mimgdisplay],
+                                   stdin=subprocess.PIPE,
+                                   stdout=subprocess.PIPE)
+            w, h = [int(string)
+                    for string
+                    in w3m.communicate("5;{0}".format(arg).encode())[0].decode().split()]
+            w3m = subprocess.Popen([w3mimgdisplay],
+                                   stdin=subprocess.PIPE,
+                                   stdout=subprocess.DEVNULL)
+            w_scaled = width
+            h_scaled = (w_scaled * h) // w
+            print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
+                x = column * (w_scaled + border),
+                y = row * (max_height + border),
+                w = w_scaled,
+                h = h_scaled,
+                h_max = max_height,
+                path = arg))
+            column = (column+1) % in_row
+            if column == 0:
+                row += 1
+            if row == max_rows:
+                break
+
+if __name__ == "__main__":
+    main()
