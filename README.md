@@ -27,6 +27,14 @@ In the sxiv window which will appear, press 'm' (by default; just a key bound to
 the `it_toggle_image_mark` sxiv function) to select/deselect the focused
 file. Additionally you can use all the regular sxiv keys (see its manpage).
 
+EXPERIMENTAL
+------------
+
+There is an experimental image preview feature which displays the images from
+the argument list **in the terminal window**. You need `w3m` installed along
+with the `w3mimgdisplay` program. Activate it with C-x C-o. Press any key to
+hide the previews.
+
 INSTALLATION
 ============
 
