@@ -23,23 +23,25 @@ def main():
             w3m = subprocess.Popen([w3mimgdisplay],
                                    stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE)
-            w, h = [int(string)
-                    for string
-                    in w3m.communicate("5;{0}".format(arg).encode())[0].decode().split()]
-            w_scaled = width
-            h_scaled = (w_scaled * h) // w
-            print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
-                x = column * (w_scaled + border),
-                y = upper_margin + row * (max_height + border),
-                w = w_scaled,
-                h = h_scaled,
-                h_max = max_height,
-                path = arg))
-            column = (column+1) % in_row
-            if column == 0:
-                row += 1
-            if row == max_rows:
-                break
+            result = w3m.communicate("5;{0}".format(arg).encode())[0].decode()
+            if result.strip():
+                w, h = [int(string)
+                        for string
+                        in result.split()]
+                w_scaled = width
+                h_scaled = (w_scaled * h) // w
+                print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
+                    x = column * (w_scaled + border),
+                    y = upper_margin + row * (max_height + border),
+                    w = w_scaled,
+                    h = h_scaled,
+                    h_max = max_height,
+                    path = arg))
+                column = (column+1) % in_row
+                if column == 0:
+                    row += 1
+                    if row == max_rows:
+                        break
 
     # signal whether we have found any images via exitcode
     exit((column or row) == 0)
