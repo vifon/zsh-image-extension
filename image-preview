@@ -3,47 +3,77 @@
 from sys import argv
 import re
 import subprocess
+import itertools
+from os import getenv
 
-# CONFIG BEGIN
-upper_margin = 50
-max_height = 300
-width = 300
-images_in_row = 5
-max_rows = 3
-border = 10
-# CONFIG END
+
+
+def get_terminal_size():
+    import sys, struct, fcntl, termios
+    _, _, w, h = struct.unpack("HHHH",
+                               fcntl.ioctl(sys.stderr.fileno(), # stderr is not redirected, unlike stdout
+                                           termios.TIOCGWINSZ,
+                                           struct.pack("HHHH",
+                                                       0,0,0,0)))
+    return w, h
+
 
 def main():
+    ##########  CONFIG BEGIN  ##########
+    upper_margin    = 50
+    max_height      = 300
+    width           = 270
+    images_in_row   = 5
+    max_rows        = 3
+    border          = 5
+    autodetect_size = True
+    ##########   CONFIG END   ##########
+
+
     w3mimgdisplay = argv.pop(1)
-    # every odd argument contains a commandline element
-    args = [arg for arg in argv[1:] if arg.strip()]
+    argv.pop(0)
+
+    if autodetect_size and getenv("DISPLAY"):
+        term_w, term_h = get_terminal_size()
+        images_in_row = term_w // (width + border)
+    else:
+        autodetect_size = False
+
+    # lazily get the at max as many elements, as we can display, while removing non-images
+    args = list(itertools.islice((arg
+                                  for arg in argv
+                                  if arg.strip()
+                                  and re.search(r"\.je?pg$|\.png$|\.bmp$|\.gif$",
+                                                arg, re.IGNORECASE)),
+                                 0, images_in_row * max_rows))
+
+    if autodetect_size and len(args) <= images_in_row:
+        width = term_w // len(args) - border
+        max_height = term_h
 
     column = 0
     row = 0
     for arg in args:
-        if re.search(r"\.je?pg$|\.png$|\.bmp$|\.gif$", arg, re.IGNORECASE):
-            w3m = subprocess.Popen([w3mimgdisplay],
-                                   stdin=subprocess.PIPE,
-                                   stdout=subprocess.PIPE)
-            result = w3m.communicate("5;{0}".format(arg).encode())[0].decode()
-            if result.strip():
-                w, h = [int(string)
-                        for string
-                        in result.split()]
-                w_scaled = width
-                h_scaled = (w_scaled * h) // w
-                print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
-                    x = column * (w_scaled + border),
-                    y = upper_margin + row * (max_height + border),
-                    w = w_scaled,
-                    h = h_scaled,
-                    h_max = max_height,
-                    path = arg))
-                column = (column+1) % images_in_row
-                if column == 0:
-                    row += 1
-                    if row == max_rows:
-                        break
+        w3m = subprocess.Popen([w3mimgdisplay],
+                               stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE)
+        result = w3m.communicate("5;{0}".format(arg).encode())[0].decode()
+        if result.strip():
+            w, h = [int(string)
+                    for string
+                    in result.split()]
+            w_scaled = width
+            h_scaled = (w_scaled * h) // w
+            print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
+                x = column * (w_scaled + border),
+                y = upper_margin + row * (max_height + border),
+                w = w_scaled,
+                h = h_scaled,
+                h_max = max_height,
+                path = arg))
+            column = (column+1) % images_in_row
+            if column == 0:
+                row += 1
 
     # signal whether we have found any images via exitcode
     exit((column or row) == 0)

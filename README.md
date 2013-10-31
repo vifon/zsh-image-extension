@@ -40,7 +40,8 @@ with the `w3mimgdisplay` program. It is confirmed to work in `urxvt` and
 variable). Press any key to hide the previews.
 
 There is a simple config on top of the `image-preview` script, so you can adjust
-it for your screen size. The default works well for 1680x1050.
+it for your screen size. The default was set for 1680x1050, feel free to change
+it.
 
 INSTALLATION
 ============
