@@ -19,7 +19,7 @@ def main():
     column = 0
     row = 0
     for arg in args:
-        if re.search(r"\.je?pg$|\.png$|\.bmp$", arg, re.IGNORECASE):
+        if re.search(r"\.je?pg$|\.png$|\.bmp$|\.gif$", arg, re.IGNORECASE):
             w3m = subprocess.Popen([w3mimgdisplay],
                                    stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE)
