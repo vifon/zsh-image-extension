@@ -35,6 +35,9 @@ the argument list **in the terminal window**. You need `w3m` installed along
 with the `w3mimgdisplay` program. Activate it with C-x C-o. Press any key to
 hide the previews.
 
+There is a simple config on top of the `image-preview` script, so you can adjust
+it for your screen size. The default works well for 1680x1050.
+
 INSTALLATION
 ============
 

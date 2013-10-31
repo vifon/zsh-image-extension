@@ -4,17 +4,19 @@ from sys import argv
 import re
 import subprocess
 
+# CONFIG BEGIN
+upper_margin = 50
+max_height = 300
+width = 300
+images_in_row = 5
+max_rows = 3
+border = 10
+# CONFIG END
+
 def main():
     w3mimgdisplay = argv.pop(1)
     # every odd argument contains a commandline element
     args = [arg for arg in argv[3:] if arg.strip()]
-
-    upper_margin = 50
-    max_height = 300
-    width = 300
-    in_row = 5
-    max_rows = 3
-    border = 10
 
     column = 0
     row = 0
@@ -37,7 +39,7 @@ def main():
                     h = h_scaled,
                     h_max = max_height,
                     path = arg))
-                column = (column+1) % in_row
+                column = (column+1) % images_in_row
                 if column == 0:
                     row += 1
                     if row == max_rows:
