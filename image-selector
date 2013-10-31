@@ -26,7 +26,7 @@ if [ -x "$W3MIMGDISPLAY" ]; then
 
         local OUTPUT
 
-        OUTPUT=`"$IMAGE_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" "${(@Q)reply}"`
+        OUTPUT=`"$IMAGE_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" ${(@Q)~reply}`
         if [ "$?" != "0" ]; then
             return $?
         fi
@@ -57,7 +57,7 @@ image-selector()
     split-shell-arguments
     ((++CURSOR))
 
-    ARG=$(eval echo $reply[$REPLY]) # evaluate tilde etc.
+    ARG=${~reply[$REPLY]}
 
     # read the file prefix
     PREFIX=.
