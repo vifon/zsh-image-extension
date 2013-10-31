@@ -16,7 +16,7 @@ border = 10
 def main():
     w3mimgdisplay = argv.pop(1)
     # every odd argument contains a commandline element
-    args = [arg for arg in argv[3:] if arg.strip()]
+    args = [arg for arg in argv[1:] if arg.strip()]
 
     column = 0
     row = 0
