@@ -41,7 +41,7 @@ EOF
         zle clear-screen
     }
     zle -N image-preview
-    bindkey '^X^O' image-preview
+    bindkey ${IMAGE_PREVIEW_KEY:-'^X^O'} image-preview
 fi
 
 image-selector()
