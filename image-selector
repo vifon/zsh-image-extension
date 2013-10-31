@@ -57,10 +57,9 @@ image-selector()
     split-shell-arguments
     ((++CURSOR))
 
-    ARG=${~reply[$REPLY]}
+    ARG=${~reply[$REPLY]%% #}
 
-    # read the file prefix
-    PREFIX=.
+    # read the file prefix with trailing slashes stripped
     [ -n "$ARG" ] && PREFIX=${ARG%%/#}
 
     # if it is a directory, use its contents; also, corner case
@@ -73,7 +72,7 @@ image-selector()
     local OLDIFS=$IFS
     local IFS="
 "
-    FILES=($($IMAGE_SELECTOR_SXIV -t -o $FILES 2> /dev/null | sort | uniq))
+    FILES=($($IMAGE_SELECTOR_SXIV -t -o -- $FILES 2> /dev/null))
     IFS=$OLDIFS
     [ -z "$FILES" ] && return
 
