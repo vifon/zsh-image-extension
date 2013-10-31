@@ -15,6 +15,9 @@ as it is great, small and hackable. ;)
 USAGE
 =====
 
+IMAGE SELECTION
+---------------
+
 To select the images from the current directory, just press C-x C-i (i.e. ctrl+x
 and then ctrl+i). You can change that key by setting the `IMAGE_SELECTOR_KEY`
 variable before sourcing this plugin.
@@ -27,13 +30,13 @@ In the sxiv window which will appear, press 'm' (by default; just a key bound to
 the `it_toggle_image_mark` sxiv function) to select/deselect the focused
 file. Additionally you can use all the regular sxiv keys (see its manpage).
 
-EXPERIMENTAL
-------------
+IMAGE PREVIEW
+-------------
 
 There is an experimental image preview feature which displays the images from
 the argument list **in the terminal window**. You need `w3m` installed along
-with the `w3mimgdisplay` program. Activate it with C-x C-o. Press any key to
-hide the previews.
+with the `w3mimgdisplay` program. It is confirmed to work in `urxvt` and
+`xterm`. Activate it with C-x C-o. Press any key to hide the previews.
 
 There is a simple config on top of the `image-preview` script, so you can adjust
 it for your screen size. The default works well for 1680x1050.
@@ -42,7 +45,7 @@ INSTALLATION
 ============
 
 The first way
-------------
+-------------
 
 Just source the `image-selector` file in your `zshrc`.
 
