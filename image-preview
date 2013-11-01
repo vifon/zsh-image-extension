@@ -47,6 +47,9 @@ def main():
                                                 arg, re.IGNORECASE)),
                                  0, images_in_row * max_rows))
 
+    if not args:
+        exit(1)
+
     if autodetect_size and len(args) <= images_in_row:
         width = term_w // len(args) - border
         max_height = term_h
@@ -77,9 +80,6 @@ def main():
             column = (column+1) % images_in_row
             if column == 0:
                 row += 1
-
-    # signal whether we have found any images via exitcode
-    exit((column or row) == 0)
 
 if __name__ == "__main__":
     main()
