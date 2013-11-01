@@ -39,10 +39,6 @@ with the `w3mimgdisplay` program. It is confirmed to work in `urxvt` and
 `xterm`. Activate it with C-x C-o (customizable via the `IMAGE_SELECTOR_KEY`
 variable). Press any key to hide the previews.
 
-There is a simple config on top of the `image-preview` script, so you can adjust
-it for your screen size. The default was set for 1680x1050, feel free to change
-it.
-
 INSTALLATION
 ============
 
@@ -91,14 +87,21 @@ Cons:
 - may need to be recompiled from time to time (shared libraries etc.),
 - needs the build dependencies of sxiv.
 
-KNOWN ISSUES
-============
+KNOWN ISSUES AND TROUBLESHOOTING
+================================
 
 All images are selected every time
 ----------------------------------
 
 You are using an old sxiv version which does not support the mark command. Try
 the second installation method to compile the compatible version.
+
+Image previews are too big/too small
+------------------------------------
+
+It should be handled automatically but if it isn't, there is a config section on
+top of the `image-preview` script, so you can adjust it for your screen
+size. (the default was set on 1680x1050 and should autoscale)
 
 SEE ALSO
 ========
