@@ -6,7 +6,7 @@ import subprocess
 import itertools
 from os import getenv
 
-
+infinity = float("inf")
 
 def get_terminal_size():
     import sys, struct, fcntl, termios
@@ -20,24 +20,24 @@ def get_terminal_size():
 
 def main():
     ##########  CONFIG BEGIN  ##########
-    upper_margin    = 50
-    max_height      = 300
-    width           = 270
-    images_in_row   = 5
-    max_rows        = 3
-    border          = 5
-    autodetect_size = True
+    upper_margin  = 50
+    max_height    = 300
+    width         = 270
+    images_in_row = 5
+    max_rows      = 3
+    border        = 5
+    if getenv("DISPLAY"):       # we are in X and not tty
+        autodetect_size = True
     ##########   CONFIG END   ##########
 
 
     w3mimgdisplay = argv.pop(1)
     argv.pop(0)
 
-    if autodetect_size and getenv("DISPLAY"):
+    if autodetect_size:
         term_w, term_h = get_terminal_size()
+        term_h -= upper_margin
         images_in_row = term_w // (width + border)
-    else:
-        autodetect_size = False
 
     # lazily get the at max as many elements, as we can display, while removing non-images
     args = list(itertools.islice((arg
@@ -62,8 +62,11 @@ def main():
             w, h = [int(string)
                     for string
                     in result.split()]
-            w_scaled = width
+            w_scaled = min(width, w)
             h_scaled = (w_scaled * h) // w
+            if h_scaled > term_h:
+                h_scaled = term_h
+                w_scaled = (h_scaled * w) // h
             print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
                 x = column * (w_scaled + border),
                 y = upper_margin + row * (max_height + border),
