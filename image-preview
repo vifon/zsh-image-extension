@@ -4,6 +4,7 @@ from sys import argv
 import re
 import subprocess
 import itertools
+import os.path
 from os import getenv
 
 def get_terminal_size():
@@ -40,6 +41,7 @@ def main():
     args = list(itertools.islice((arg
                                   for arg in argv
                                   if arg.strip()
+                                  and os.path.isfile(arg)
                                   and re.search(r"\.jpe?g$|\.png$|\.bmp$|\.gif$",
                                                 arg, re.IGNORECASE)),
                                  0, images_in_row * max_rows))
