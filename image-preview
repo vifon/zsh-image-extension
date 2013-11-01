@@ -26,8 +26,7 @@ def main():
     images_in_row = 5
     max_rows      = 3
     border        = 5
-    if getenv("DISPLAY"):       # we are in X and not tty
-        autodetect_size = True
+    autodetect_size = bool(getenv("DISPLAY")) # we are in X and not tty
     ##########   CONFIG END   ##########
 
 
@@ -67,7 +66,7 @@ def main():
                     in result.split()]
             w_scaled = min(width, w)
             h_scaled = (w_scaled * h) // w
-            if h_scaled > term_h:
+            if autodetect_size and h_scaled > term_h:
                 h_scaled = term_h
                 w_scaled = (h_scaled * w) // h
             print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
