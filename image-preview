@@ -32,6 +32,7 @@ def main():
     w3mimgdisplay = argv.pop(1)
     argv.pop(0)
 
+    # calculate how many images can we fit horizontally
     if autodetect_size:
         term_w, term_h = get_terminal_size()
         term_h -= upper_margin
@@ -49,9 +50,11 @@ def main():
     if not args:
         exit(1)
 
-    if autodetect_size and len(args) <= images_in_row:
-        width = term_w // len(args) - border
-        max_height = term_h
+    # calculate the maximum image width that will still let us fit images_in_row images
+    if autodetect_size:
+        width = term_w // min(images_in_row, len(args)) - border
+        if len(args) <= images_in_row:
+            max_height = term_h
     else:
         autodetect_size = False
 
