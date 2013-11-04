@@ -55,8 +55,9 @@ def main():
         width = term_w // min(images_in_row, len(args)) - border
         if len(args) <= images_in_row:
             max_height = term_h
-    else:
-        autodetect_size = False
+        else:
+            # do not scale later to fit the image vertically
+            autodetect_size = False
 
     column = 0
     row = 0
@@ -75,7 +76,7 @@ def main():
                 h_scaled = term_h
                 w_scaled = (h_scaled * w) // h
             print("2;3;\n0;1;{x};{y};{w};{h};0;0;0;{h_max};{path}\n4;\n3;".format(
-                x = column * (w_scaled + border),
+                x = column * (width + border),
                 y = upper_margin + row * (max_height + border),
                 w = w_scaled,
                 h = h_scaled,
