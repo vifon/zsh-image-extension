@@ -20,15 +20,16 @@ if [ -x "$W3MIMGDISPLAY" ]; then
     image-preview()
     {
         autoload -U split-shell-arguments
+        setopt local_options nullglob
 
         # local variables for split-shell-arguments
         local reply REPLY REPLY2
-
         split-shell-arguments
 
-        local OUTPUT
+        eval "reply=($reply)"
 
-        OUTPUT=`"$IMAGE_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" ${(@Q)~reply}`
+        local OUTPUT
+        OUTPUT=`"$IMAGE_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" $reply`
         if [ "$?" != "0" ]; then
             return $?
         fi
