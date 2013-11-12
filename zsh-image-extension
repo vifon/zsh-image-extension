@@ -1,0 +1,111 @@
+# -*- mode: shell-script -*-
+# vim: ft=zsh fdm=marker :
+
+
+# root dir of this plugin (assuming dirname of this file with resolved symlinks)
+IMAGE_EXTENSION_DIR="${0:A:h}"
+
+# default preview key: C-x C-o
+IMAGE_EXTENSION_PREVIEW_KEY=${IMAGE_EXTENSION_PREVIEW_KEY:-'^X^O'}
+
+# default selection key: C-x C-i
+IMAGE_EXTENSION_SELECTION_KEY=${IMAGE_EXTENSION_SELECTION_KEY:-'^X^I'}
+
+# path to the w3mimgdisplay program (often provided by the w3m or w3m-img package)
+W3MIMGDISPLAY=/usr/lib/w3m/w3mimgdisplay
+
+
+
+
+
+# if we have w3mimgdisplay available, enable the preview feature
+if [ -x "$W3MIMGDISPLAY" ]; then
+    IMAGE_EXTENSION_PREVIEW_SCRIPT="$IMAGE_EXTENSION_DIR/image-preview.py"
+    zsh-image-extension-preview-widget()
+    {
+        autoload -U split-shell-arguments
+        setopt local_options nullglob
+
+        # local variables for split-shell-arguments
+        local reply REPLY REPLY2
+        split-shell-arguments
+
+        # expand globbing and unquote the arguments
+        eval "reply=($reply)"
+
+        local OUTPUT
+        OUTPUT=`"$IMAGE_EXTENSION_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" $reply`
+        if [ "$?" != "0" ]; then
+            return $?
+        fi
+
+        "$W3MIMGDISPLAY" &> /dev/null <<EOF
+$OUTPUT
+EOF
+
+        read -s -k
+        zle clear-screen
+    }
+    zle -N zsh-image-extension-preview-widget
+    bindkey $IMAGE_EXTENSION_PREVIEW_KEY zsh-image-extension-preview-widget
+fi
+
+
+
+
+
+if [ -x "$IMAGE_EXTENSION_DIR/sxiv" ]; then
+    # try to use the bundled sxiv
+    IMAGE_EXTENSION_SXIV="$IMAGE_EXTENSION_DIR/sxiv"
+else
+    # or the system-wide if the bundled one is not available
+    IMAGE_EXTENSION_SXIV=`whence sxiv`
+fi
+
+# if either sxiv is available, enable the selection feature
+if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
+    zsh-image-extension-selection-widget()
+    {
+        autoload -U modify-current-argument
+        autoload -U split-shell-arguments
+
+        # local variables for split-shell-arguments
+        local reply REPLY REPLY2
+
+        local ARG
+        local PREFIX
+
+        ((--CURSOR))
+        split-shell-arguments
+        ((++CURSOR))
+
+        ARG=${~reply[$REPLY]%% \#}
+
+        # read the file prefix with trailing slashes stripped
+        [ -n "$ARG" ] && PREFIX=${ARG%%/#}
+
+        # if it is a directory, use its contents; also, corner case
+        [ -d "$PREFIX" ] || [ "$ARG" = "/" ] && PREFIX=${PREFIX}/
+
+        local FILES
+        FILES=(${PREFIX}*(-.N))
+        [ -z "$FILES" ] && return
+
+        local IFS="
+"
+        FILES=($($IMAGE_EXTENSION_SXIV -t -o -- $FILES 2> /dev/null))
+        unset IFS
+        [ -z "$FILES" ] && return
+
+        # quote the metacharacters
+        FILES=$FILES:q
+
+        if [ -n "$ARG" ]; then
+            modify-current-argument '$FILES'
+        else
+            LBUFFER="${LBUFFER%% #} $FILES"
+        fi
+    }
+    zle -N zsh-image-extension-selection-widget
+    bindkey $IMAGE_EXTENSION_SELECTION_KEY zsh-image-extension-selection-widget
+fi

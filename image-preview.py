@@ -1,14 +1,21 @@
 #!/usr/bin/env python
+"""
+w3mimgdisplay wrapper
 
-from sys import argv
+Usage: image-preview.py w3mimgdisplay_path [ files ... ]
+
+Only jpeg, jpg, png and gif files are processed.
+"""
+
+import argparse
 import re
 import subprocess
 import itertools
 import os.path
 from os import getenv
 
+import sys, struct, fcntl, termios
 def get_terminal_size():
-    import sys, struct, fcntl, termios
     _, _, w, h = struct.unpack("HHHH",
                                fcntl.ioctl(sys.stderr.fileno(), # stderr is not redirected, unlike stdout
                                            termios.TIOCGWINSZ,
@@ -25,35 +32,40 @@ def main():
     images_in_row = 5
     max_rows      = 3
     border        = 5
-    autodetect_size = bool(getenv("DISPLAY")) # we are in X and not tty
+    autodetect_size = bool(getenv("DISPLAY")) # are we in X or in tty?
     ##########   CONFIG END   ##########
 
 
-    w3mimgdisplay = argv.pop(1)
-    argv.pop(0)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("w3mimgdisplay_path")
+    parser.add_argument("files", nargs="+")
+    args = parser.parse_args()
 
-    # calculate how many images can we fit horizontally
+    w3mimgdisplay = args.w3mimgdisplay_path
+    files = args.files
+
+    # calculate how many images we can fit horizontally
     if autodetect_size:
         term_w, term_h = get_terminal_size()
         term_h -= upper_margin
         images_in_row = term_w // (width + border)
 
     # lazily get at max as many elements, as we can display, while removing non-images
-    args = list(itertools.islice((arg
-                                  for arg in argv
-                                  if arg.strip()
-                                  and os.path.isfile(arg)
-                                  and re.search(r"\.jpe?g$|\.png$|\.bmp$|\.gif$",
-                                                arg, re.IGNORECASE)),
-                                 0, images_in_row * max_rows))
+    files = list(itertools.islice((file
+                                   for file in files
+                                   if file.strip()
+                                   and os.path.isfile(file)
+                                   and re.search(r"\.jpe?g$|\.png$|\.bmp$|\.gif$",
+                                                 file, re.IGNORECASE)),
+                                  0, images_in_row * max_rows))
 
-    if not args:
+    if not files:
         exit(1)
 
     # calculate the maximum image width that will still let us fit images_in_row images
     if autodetect_size:
-        width = term_w // min(images_in_row, len(args)) - border
-        if len(args) <= images_in_row:
+        width = term_w // min(images_in_row, len(files)) - border
+        if len(files) <= images_in_row:
             max_height = term_h
         else:
             # do not scale later to fit the image vertically
@@ -61,11 +73,11 @@ def main():
 
     column = 0
     row = 0
-    for arg in args:
+    for file in files:
         w3m = subprocess.Popen([w3mimgdisplay],
                                stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE)
-        result = w3m.communicate("5;{0}".format(arg).encode())[0].decode()
+        result = w3m.communicate("5;{0}".format(file).encode())[0].decode()
         if result.strip():
             w, h = [int(string)
                     for string
@@ -81,7 +93,7 @@ def main():
                 w = w_scaled,
                 h = h_scaled,
                 h_max = max_height,
-                path = arg))
+                path = file))
             column = (column+1) % images_in_row
             if column == 0:
                 row += 1
