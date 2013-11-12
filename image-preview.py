@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+"""
+w3mimgdisplay wrapper
+
+Usage: image-preview.py w3mimgdisplay_path [ files ... ]
+
+Only jpeg, jpg, png and gif files are processed.
+"""
 
 from sys import argv
 import re
