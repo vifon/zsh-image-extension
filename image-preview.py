@@ -7,7 +7,7 @@ Usage: image-preview.py w3mimgdisplay_path [ files ... ]
 Only jpeg, jpg, png and gif files are processed.
 """
 
-import argparse
+from sys import argv
 import re
 import subprocess
 import itertools
@@ -36,13 +36,10 @@ def main():
     ##########   CONFIG END   ##########
 
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("w3mimgdisplay_path")
-    parser.add_argument("files", nargs="+")
-    args = parser.parse_args()
+    w3mimgdisplay = argv.pop(1)
+    argv.pop(0)
 
-    w3mimgdisplay = args.w3mimgdisplay_path
-    files = args.files
+    files = argv
 
     # calculate how many images we can fit horizontally
     if autodetect_size:
