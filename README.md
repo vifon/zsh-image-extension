@@ -45,7 +45,8 @@ The activation sequence may be customized by setting the
 INSTALLATION
 ------------
 
-Run `make` to download the `sxiv` source and compile it, and then source the
+Run `make` to download the `sxiv` source and compile it, and then source
+(i.e. add the `source path/to/file` line to your `zshrc`) the
 `zsh-image-extension`. You can provide your own `config.h` and recompile `sxiv`
 (by running `make` again).
 
