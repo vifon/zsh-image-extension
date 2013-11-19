@@ -97,6 +97,7 @@ def main():
             column = (column+1) % images_in_row
             if column == 0:
                 row += 1
+    print(consumed_arg_count)
 
 if __name__ == "__main__":
     main()
