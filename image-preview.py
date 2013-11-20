@@ -44,6 +44,7 @@ def main():
         term_w, term_h = get_terminal_size()
         term_h -= upper_margin
         images_in_row = term_w // (width + border)
+        max_rows = term_h // (max_height + border)
 
 
     # get as many images, as we can display, while removing non-images
