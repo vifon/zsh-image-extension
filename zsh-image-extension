@@ -30,21 +30,31 @@ if [ -x "$W3MIMGDISPLAY" ]; then
         local reply REPLY REPLY2
         split-shell-arguments
 
-        # expand globbing and unquote the arguments
-        eval "reply=($reply)"
+        # expand globbing and unquote the arguments while omitting the arguments
+        # containing only spaces
+        eval "reply=(${reply:# #})"
 
+        local KEY
         local OUTPUT
-        OUTPUT=`"$IMAGE_EXTENSION_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" $reply`
-        if [ "$?" != "0" ]; then
-            return $?
-        fi
+        while [ "$KEY" != 'q' ]; do
+            local IFS="
+"
+            OUTPUT=(`"$IMAGE_EXTENSION_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" $reply`)
+            if [ "$?" != "0" ]; then
+                break
+            fi
+            unset IFS
+            shift $OUTPUT[-1] reply
 
-        "$W3MIMGDISPLAY" &> /dev/null <<EOF
-$OUTPUT
+            "$W3MIMGDISPLAY" &> /dev/null <<EOF
+${(j:
+:)OUTPUT[1,-2]}
 EOF
 
-        read -s -k
-        zle clear-screen
+            read -s -k 1 KEY
+            clear
+        done
+        zle redisplay
     }
     zle -N zsh-image-extension-preview-widget
     bindkey $IMAGE_EXTENSION_PREVIEW_KEY zsh-image-extension-preview-widget

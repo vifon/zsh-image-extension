@@ -39,22 +39,26 @@ def main():
     w3mimgdisplay = argv.pop(1)
     argv.pop(0)
 
-    files = argv
-
     # calculate how many images we can fit horizontally
     if autodetect_size:
         term_w, term_h = get_terminal_size()
         term_h -= upper_margin
         images_in_row = term_w // (width + border)
+        max_rows = term_h // (max_height + border)
 
-    # lazily get at max as many elements, as we can display, while removing non-images
-    files = list(itertools.islice((file
-                                   for file in files
-                                   if file.strip()
-                                   and os.path.isfile(file)
-                                   and re.search(r"\.jpe?g$|\.png$|\.bmp$|\.gif$",
-                                                 file, re.IGNORECASE)),
-                                  0, images_in_row * max_rows))
+
+    # get as many images, as we can display, while removing non-images
+    consumed_arg_count = 0
+    files = []
+    for file in argv:
+        consumed_arg_count += 1
+        if (file.strip() and
+            os.path.isfile(file) and
+            re.search(r"\.jpe?g$|\.png$|\.bmp$|\.gif$",
+                      file, re.IGNORECASE)):
+            files.append(file)
+            if len(files) >= images_in_row * max_rows:
+                break
 
     if not files:
         exit(1)
@@ -94,6 +98,7 @@ def main():
             column = (column+1) % images_in_row
             if column == 0:
                 row += 1
+    print(consumed_arg_count)
 
 if __name__ == "__main__":
     main()

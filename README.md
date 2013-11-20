@@ -14,7 +14,9 @@ USAGE
 **Image preview**
 
 You can preview the images listed in the command line in the terminal window by
-pressing ctrl+x ctrl+o (i.e. ctrl+x and then ctrl+o). Press any key to dismiss.
+pressing ctrl+x ctrl+o (i.e. ctrl+x and then ctrl+o). Press any key dismiss. If
+there are too many images to display, any key other than 'q' will display the
+next image portion.
 
 May not work with all the terminals. Confirmed to work with `urxvt`, `xterm` and
 the Linux tty.
