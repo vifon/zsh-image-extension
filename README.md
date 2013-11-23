@@ -47,6 +47,10 @@ The activation sequence may be customized by setting the
 INSTALLATION
 ------------
 
+This method **will not work** if you do not have this plugin's Git repository
+downloaded. Use the method described in the next paragraph in that case or just
+download that repository.
+
 Run `make` to download the `sxiv` source and compile it, and then source
 (i.e. add the `source path/to/file` line to your `zshrc`) the
 `zsh-image-extension`. You can provide your own `config.h` and recompile `sxiv`
@@ -61,6 +65,7 @@ DEPENDENCIES
 
 * `sxiv` (automatically provided) for image selection
 * `w3m` (`w3m-img` on Debian, Ubuntu, etc.) for image preview
+* `git` and `make` for automated `sxiv` download and compilation
 
 KNOWN ISSUES AND TROUBLESHOOTING
 --------------------------------
