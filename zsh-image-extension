@@ -24,7 +24,7 @@ if [ -x "$W3MIMGDISPLAY" ]; then
     zsh-image-extension-preview-widget()
     {
         autoload -U split-shell-arguments
-        setopt local_options nullglob
+        setopt local_options nullglob extended_glob
 
         # local variables for split-shell-arguments
         local reply REPLY REPLY2
@@ -78,6 +78,7 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
     {
         autoload -U modify-current-argument
         autoload -U split-shell-arguments
+        setopt local_options nullglob extended_glob
 
         # local variables for split-shell-arguments
         local reply REPLY REPLY2
