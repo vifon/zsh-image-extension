@@ -37,8 +37,7 @@ if [ -x "$W3MIMGDISPLAY" ]; then
         local KEY
         local OUTPUT
         while [ "$KEY" != 'q' ]; do
-            local IFS="
-"
+            local IFS=$'\n'
             OUTPUT=(`"$IMAGE_EXTENSION_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" $reply`)
             if [ "$?" != "0" ]; then
                 break
@@ -47,8 +46,7 @@ if [ -x "$W3MIMGDISPLAY" ]; then
             shift $OUTPUT[-1] reply
 
             "$W3MIMGDISPLAY" &> /dev/null <<EOF
-${(j:
-:)OUTPUT[1,-2]}
+${(F)OUTPUT[1,-2]}
 EOF
 
             read -s -k 1 KEY
@@ -102,8 +100,7 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
         FILES=(${PREFIX}*(-.N))
         [ -z "$FILES" ] && return
 
-        local IFS="
-"
+        local IFS=$'\n'x
         FILES=($($IMAGE_EXTENSION_SXIV -t -o -- $FILES 2> /dev/null))
         unset IFS
         [ -z "$FILES" ] && return

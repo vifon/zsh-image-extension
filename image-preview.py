@@ -52,8 +52,7 @@ def main():
     files = []
     for file in argv:
         consumed_arg_count += 1
-        if (file.strip() and
-            os.path.isfile(file) and
+        if (os.path.isfile(file) and
             re.search(r"\.jpe?g$|\.png$|\.bmp$|\.gif$",
                       file, re.IGNORECASE)):
             files.append(file)
