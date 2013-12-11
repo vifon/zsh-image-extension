@@ -1,10 +1,13 @@
 #!/usr/bin/env python
-"""
-w3mimgdisplay wrapper
+"""w3mimgdisplay wrapper
 
 Usage: image-preview.py w3mimgdisplay_path [ files ... ]
 
 Only jpeg, jpg, png and gif files are processed.
+
+Outputs the input lines for w3mimgdisplay except for the last line,
+which contains the number of consumed arguments.
+
 """
 
 from sys import argv
