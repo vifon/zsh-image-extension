@@ -23,8 +23,9 @@ if [ -x "$W3MIMGDISPLAY" ]; then
     IMAGE_EXTENSION_PREVIEW_SCRIPT="$IMAGE_EXTENSION_DIR/image-preview.py"
     zsh-image-extension-preview-widget()
     {
+        emulate -L zsh
         autoload -U split-shell-arguments
-        setopt local_options nullglob extended_glob
+        setopt nullglob extended_glob
 
         # local variables for split-shell-arguments
         local reply REPLY REPLY2
@@ -74,9 +75,10 @@ fi
 if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
     zsh-image-extension-selection-widget()
     {
+        emulate -L zsh
         autoload -U modify-current-argument
         autoload -U split-shell-arguments
-        setopt local_options nullglob extended_glob
+        setopt nullglob extended_glob
 
         # local variables for split-shell-arguments
         local reply REPLY REPLY2
