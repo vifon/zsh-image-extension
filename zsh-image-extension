@@ -102,7 +102,7 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
         FILES=(${PREFIX}*(-.N))
         [ -z "$FILES" ] && return
 
-        local IFS=$'\n'x
+        local IFS=$'\n'
         FILES=($($IMAGE_EXTENSION_SXIV -t -o -- $FILES 2> /dev/null))
         unset IFS
         [ -z "$FILES" ] && return
