@@ -111,7 +111,10 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
         FILES=$FILES:q
 
         if [ -n "$ARG" ]; then
-            modify-current-argument '$FILES'
+            # Ignore the :-$ARG part. It's a hack to force
+            # modify-current-argument to interpret it as an
+            # expression and not a function.
+            modify-current-argument '${FILES:-$ARG}'
         else
             LBUFFER="${LBUFFER%% #} $FILES"
         fi
