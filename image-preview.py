@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """w3mimgdisplay wrapper
 
 Usage: image-preview.py w3mimgdisplay_path [ files ... ]
