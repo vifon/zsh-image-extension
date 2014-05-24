@@ -51,9 +51,13 @@ ${(F)OUTPUT[1,-2]}
 EOF
 
             read -s -k 1 KEY
-            clear
+            xrefresh -geometry $(xwininfo -id $WINDOWID | awk '
+/Absolute upper-left X:/ { x = $4 }
+/Absolute upper-left Y:/ { y = $4 }
+/Width:/ { w = $2 }
+/Height:/ { h = $2 }
+END { printf "%sx%s+%s+%s", w,h,x,y }')
         done
-        zle redisplay
     }
     zle -N zsh-image-extension-preview-widget
     bindkey $IMAGE_EXTENSION_PREVIEW_KEY zsh-image-extension-preview-widget
