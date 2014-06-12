@@ -87,6 +87,11 @@ It happens under the composing window managers. Enable the legacy
 clearing method in the `zsh-image-extension` file or set the
 `IMAGE_EXTENSION_CLEAR_FALLBACK` variable to 1.
 
+TODO
+----
+
+- a proper image clearing method working for tty and compositing window managers
+
 ACKNOWLEDGMENTS
 ---------------
 
