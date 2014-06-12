@@ -14,6 +14,9 @@ IMAGE_EXTENSION_SELECTION_KEY=${IMAGE_EXTENSION_SELECTION_KEY:-'^X^I'}
 # path to the w3mimgdisplay program (often provided by the w3m or w3m-img package)
 W3MIMGDISPLAY=/usr/lib/w3m/w3mimgdisplay
 
+# try enabling it if you use a compositing window manager or
+# experience some problems with previews
+IMAGE_EXTENSION_CLEAR_FALLBACK=0
 
 
 
@@ -51,12 +54,17 @@ ${(F)OUTPUT[1,-2]}
 EOF
 
             read -s -k 1 KEY
-            xrefresh -geometry $(xwininfo -id $WINDOWID | awk '
+            if [ -n "$DISPLAY" -a "$IMAGE_EXTENSION_CLEAR_FALLBACK" != 1 ]; then
+                xrefresh -geometry $(xwininfo -id $WINDOWID | awk '
 /Absolute upper-left X:/ { x = $NF }
 /Absolute upper-left Y:/ { y = $NF }
 /Width:/                 { w = $NF }
 /Height:/                { h = $NF }
 END { printf "%sx%s+%s+%s", w,h,x,y }')
+            else
+                clear
+                zle redisplay
+            fi
         done
     }
     zle -N zsh-image-extension-preview-widget

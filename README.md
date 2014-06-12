@@ -81,6 +81,17 @@ It should be handled automatically but if it isn't, there is a config section on
 top of the `image-preview.py` script, so you can adjust it for your screen
 size. (the default was set on 1680x1050 and should autoscale unless in tty)
 
+**Image preview are not cleared properly**
+
+It happens under the composing window managers. Enable the legacy
+clearing method in the `zsh-image-extension` file or set the
+`IMAGE_EXTENSION_CLEAR_FALLBACK` variable to 1.
+
+TODO
+----
+
+- a proper image clearing method working for tty and compositing window managers
+
 ACKNOWLEDGMENTS
 ---------------
 
