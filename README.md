@@ -18,6 +18,8 @@ pressing ctrl+x ctrl+o (i.e. ctrl+x and then ctrl+o). Press any key dismiss. If
 there are too many images to display, any key other than 'q' will display the
 next image portion.
 
+The preview function may be used as a regular command by running `ils` (image ls).
+
 May not work with all the terminals. Confirmed to work with `urxvt`, `xterm` and
 the Linux tty.
 
@@ -26,7 +28,6 @@ package.
 
 The activation sequence may be customized by setting the
 `IMAGE_EXTENSION_PREVIEW_KEY` variable prior to loading this plugin.
-
 
 **Image selection**
 

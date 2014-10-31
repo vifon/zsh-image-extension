@@ -38,16 +38,24 @@ if [ -x "$W3MIMGDISPLAY" ]; then
         # containing only spaces
         eval "reply=(${reply:# #})"
 
+        zsh-image-extension-preview $reply
+    }
+    zle -N zsh-image-extension-preview-widget
+    bindkey $IMAGE_EXTENSION_PREVIEW_KEY zsh-image-extension-preview-widget
+
+    zsh-image-extension-preview()
+    {
+        emulate -L zsh
         local KEY
         local OUTPUT
         while [ "$KEY" != 'q' ]; do
             local IFS=$'\n'
-            OUTPUT=(`"$IMAGE_EXTENSION_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" $reply`)
+            OUTPUT=(`"$IMAGE_EXTENSION_PREVIEW_SCRIPT" "$W3MIMGDISPLAY" "$@"`)
             if [ "$?" != "0" ]; then
                 break
             fi
             unset IFS
-            shift $OUTPUT[-1] reply
+            shift $OUTPUT[-1]
 
             "$W3MIMGDISPLAY" &> /dev/null <<EOF
 ${(F)OUTPUT[1,-2]}
@@ -63,12 +71,11 @@ EOF
 END { printf "%sx%s+%s+%s", w,h,x,y }')
             else
                 clear
-                zle redisplay
+                zle && zle redisplay
             fi
         done
     }
-    zle -N zsh-image-extension-preview-widget
-    bindkey $IMAGE_EXTENSION_PREVIEW_KEY zsh-image-extension-preview-widget
+    alias ils=zsh-image-extension-preview
 fi
 
 
