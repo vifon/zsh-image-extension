@@ -109,7 +109,7 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
         split-shell-arguments
         ((++CURSOR))
 
-        ARG=${~reply[$REPLY]%% #}
+        ARG=${reply[$REPLY]%% #}
 
         # read the file prefix with trailing slashes stripped
         [ -n "$ARG" ] && PREFIX=${ARG%%/#}
@@ -118,7 +118,7 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
         [ -d "$PREFIX" ] || [ "$ARG" = "/" ] && PREFIX=${PREFIX}/
 
         local FILES
-        FILES=(${PREFIX}*(-.N))
+        FILES=(${~PREFIX}*(-.N))
         [ -z "$FILES" ] && return
 
         local IFS=$'\n'
