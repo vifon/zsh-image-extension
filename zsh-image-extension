@@ -111,14 +111,17 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
 
         ARG=${reply[$REPLY]%% #}
 
-        # read the file prefix with trailing slashes stripped
-        [ -n "$ARG" ] && PREFIX=${ARG%%/#}
+        # read the file prefix with trailing *'s stripped
+        PREFIX=${ARG%%\*#}
 
-        # if it is a directory, use its contents; also, corner case
-        [ -d "$PREFIX" ] || [ "$ARG" = "/" ] && PREFIX=${PREFIX}/
+        # If it is a directory, use its contents (i.e. it should end
+        # up like ".../*" and not "...*") and deduplicate the traling
+        # slashes.
+        [ -d "$PREFIX" ] && PREFIX=${PREFIX%%/#}/
 
         local FILES
-        FILES=(${~PREFIX}*(-.N))
+        PREFIX=$PREFIX*
+        FILES=(${~PREFIX}(-.N))
         [ -z "$FILES" ] && return
 
         local IFS=$'\n'
