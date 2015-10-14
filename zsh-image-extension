@@ -120,8 +120,7 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
         [ -d "$PREFIX" ] && PREFIX=${PREFIX%%/#}/
 
         local FILES
-        PREFIX=$PREFIX*
-        FILES=(${~PREFIX}(-.N))
+        eval "FILES=($PREFIX*(-.N))"
         [ -z "$FILES" ] && return
 
         local IFS=$'\n'
