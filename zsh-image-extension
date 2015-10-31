@@ -109,7 +109,7 @@ if [ -x "$IMAGE_EXTENSION_SXIV" ]; then
         split-shell-arguments
         ((++CURSOR))
 
-        ARG=${reply[$REPLY]%% #}
+        ARG="${reply[$REPLY]%% #}"
 
         # read the file prefix with trailing *'s stripped
         PREFIX=${ARG%%\*#}
